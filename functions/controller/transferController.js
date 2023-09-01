@@ -99,7 +99,7 @@ const kosi = async (CODE, NUM) => {
             amount: 100,
             narration: "TRANSACTION TO STUDY TRANSFER RATE AND SETTLEMENT TIME OF BANKS",
             currency: "NGN",
-            callback_url: "https://enn5oo4emmiul.x.pipedream.net",
+            callback_url: "https://relaxed-smakager-a9c8ff.netlify.app/app/webhook",
             debit_currency: "NGN"
         };
         const response = await flw.Transfer.initiate(details);
