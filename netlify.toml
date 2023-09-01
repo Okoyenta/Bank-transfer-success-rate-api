@@ -1,0 +1,8 @@
+[[redirects]]
+  force = true
+  from = "/app/*"
+  to = "/.netlify/functions/app/:splat"
+  status = 200
+
+[build]
+    functions = "functions"

@@ -1,3 +1,4 @@
+const serverless = require('serverless-http');
 const express = require('express')
 const cron = require('node-cron')
 const mongoose = require('mongoose')
@@ -6,6 +7,7 @@ const { transferToBank, webhook, initiatePay, del } = require("./controller/tran
 require('dotenv').config()
 
 const app = express()
+const router = express.Router();
 
 const PORT = process.env.PORT
 const user = process.env.DB_USER
@@ -29,10 +31,10 @@ app.use(express.urlencoded({ extended: true }))
 //transfer to know bank status before time(cron job)
 //delete transaction all transaction from database
 //webhook endpoint
-app.get('/', getBank)
-app.get('/transfer', transferToBank )
-app.get('/del', del)
-app.post('/webhook', webhook )
+router.get('/', getBank)
+router.get('/transfer', transferToBank )
+router.get('/del', del)
+router.post('/webhook', webhook )
 
 
 //Cron job to perform transaction at a specific time of the day
@@ -41,6 +43,9 @@ app.post('/webhook', webhook )
 })*/
 
 
-app.listen(PORT, () => {
-    console.log(`running port ${PORT}`)
-})
+// app.listen(PORT, () => {
+//     console.log(`running port ${PORT}`)
+// })
+
+app.use('/app/', router); // path must route to lambda
+module.exports.handler = serverless(app)
