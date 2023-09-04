@@ -3,7 +3,7 @@ const express = require('express')
 const cron = require('node-cron')
 const getBank = require('./controller/bankController')
 const { transferToBank, webhook, initiatePay, del } = require("./controller/transferController")
-const connectToDB = require('./db')
+const connectToDB = require('./controller/db')
 require('dotenv').config()
 
 const app = express()
