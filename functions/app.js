@@ -49,9 +49,9 @@ router.post('/webhook', webhook )
 // })
 
 //close db
-app.use((req, res) => {
-    mongoose.disconnect();
-});
+// app.use((req, res) => {
+//     mongoose.disconnect();
+// });
 
 
 app.use('/app/', router); // path must route to lambda
