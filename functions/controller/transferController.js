@@ -7,7 +7,7 @@ async function run(bankCode, accountNumber, bankName ){
 
      // Fetch transactions for the recipient bank and sort them by timestamp in descending order
      // Sort in descending order based on timestamp to get the latest transactions first
-     const l1 = await transfer.find({ "data.bank_code": bankCode }).sort({ "data.paymentConfirmationTime": -1 }).limit(8)
+     const l1 = await transfer.find({ "data.bank_code": bankCode }).sort({ "data.paymentConfirmationTime": -1 }).limit(4)
      console.log(l1)
 
      const payTime = l1[0].data.paymentConfirmationTime
@@ -120,13 +120,12 @@ const kosi = async (CODE, NUM) => {
 
 //
 let lap = [
-    {BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'},
-    {BankCode: '044', BankName: 'access bank', BankAccount: '0690000032'}
+    {BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'}
 ]
 
  function initiatePay() {
      try{
-         for(let i = 0; i < 1; i++) {
+         for(let i = 0; i < 4 ; i++) {
              lap.forEach((item) => {
                  kosi(item.BankCode, item.BankAccount)
              })

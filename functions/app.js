@@ -9,14 +9,10 @@ require('dotenv').config()
 const app = express()
 const router = express.Router();
 
-//const PORT = process.env.PORT
-// const user = process.env.DB_USER
-// const password = process.env.DB_PASSWORD
-// const db_name = process.env.DB_NAME
-
-const user = 'okoyentaeva'
-const password = 'Z9XcRYAnEChtqbvF'
-const db_name = "Cluster0"
+const PORT = process.env.PORT
+const user = process.env.DB_USER
+const password = process.env.DB_PASSWORD
+const db_name = process.env.DB_NAME
 
 
 //database connection
@@ -53,4 +49,6 @@ router.post('/webhook', webhook )
 // })
 
 app.use('/app/', router); // path must route to lambda
+
+module.exports = app
 module.exports.handler = serverless(app)
