@@ -49,10 +49,13 @@ router.post('/webhook', webhook )
 // })
 
 //close db
+app.use((req, res) => {
+    mongoose.disconnect();
+});
 
 
 app.use('/app/', router); // path must route to lambda
-mongoose.disconnect();
+
 
 module.exports = app
 module.exports.handler = serverless(app)
