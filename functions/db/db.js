@@ -11,7 +11,6 @@ const connectToDB = async () => {
           db.once('open', function() {
           console.log('connected to db')
           });
-          
   } catch (error) {
     console.log(error);
     console.log("mongoose Error");
