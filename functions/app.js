@@ -48,6 +48,10 @@ router.post('/webhook', webhook )
 //     console.log(`running port ${PORT}`)
 // })
 
+//close db
+mongoose.disconnect();
+
+
 app.use('/app/', router); // path must route to lambda
 
 module.exports = app
