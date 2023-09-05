@@ -136,45 +136,44 @@ let lap = [
     {BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'}
 ]
 
-// function initiatePay() {
-//      try{
-//          for(let i = 0; i < 4 ; i++) {
-//              lap.forEach((item) => {
-//                 const k = kosi(item.BankCode, item.BankAccount)
-//                 return k
-//              })
-//          }
+function initiatePay() {
+     try{
+         for(let i = 0; i < 4 ; i++) {
+             lap.forEach((item) => {
+                const k = kosi(item.BankCode, item.BankAccount)
+             })
+         }
 
-//      } catch (err) {
-//          console.log(err.message)
-//      }
-//  }
+     } catch (err) {
+         console.log(err.message)
+     }
+ }
 
-async function initiatePay() {
-    try {
-        const numberOfRuns = 4;
-        let allResponses = [];
-        for (let run = 1; run <= numberOfRuns; run++) {
-            console.log(`Run ${run}`);
-            for (const item of lap) {
-                const response = await kosi(item.BankCode, item.BankAccount);
-                // Process the response before moving to the next transaction
-                console.log("Transaction completed:", response);
-                allResponses.push(response);
-                //return response;
-            }
-        }
-        return allResponses;
-    } catch (err) {
-        console.log(err.message);
-    }
-}
+// async function initiatePay() {
+//     try {
+//         const numberOfRuns = 4;
+//         let allResponses = [];
+//         for (let run = 1; run <= numberOfRuns; run++) {
+//             console.log(`Run ${run}`);
+//             for (const item of lap) {
+//                 const response = await kosi(item.BankCode, item.BankAccount);
+//                 // Process the response before moving to the next transaction
+//                 console.log("Transaction completed:", response);
+//                 allResponses.push(response);
+//                 //return response;
+//             }
+//         }
+//         return allResponses;
+//     } catch (err) {
+//         console.log(err.message);
+//     }
+// }
 
 const transferToBank = async (req, res) => {
     try {
 
-        const k = await initiatePay()
-        res.status(200).json( k )
+        initiatePay()
+        res.status(200).json( { message: "transfer done" } )
 
     } catch (err) {
         console.log(err.message)
