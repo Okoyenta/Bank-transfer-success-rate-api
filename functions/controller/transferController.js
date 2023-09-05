@@ -104,10 +104,23 @@ const kosi = async (CODE, NUM) => {
         };
         const response = await flw.Transfer.initiate(details);
         const payDate = new Date()
-        response.data.paymentInitiationTime = payDate
-        const lo = await transfer.create(response)
-        console.log(lo)
-        return lo
+        // response.data.paymentInitiationTime = payDate
+        // const lo = await transfer.create(response)
+        // console.log(lo)
+        // return lo
+
+         // Check if response.data is not null or undefined before setting properties
+         if (response.data) {
+            response.data.paymentInitiationTime = payDate;
+            const lo = await transfer.create(response);
+            console.log(lo);
+            return lo;
+        } else {
+            // Handle the case where response.data is null or undefined
+            console.log("Response data is null or undefined");
+            // You may want to return an error or take appropriate action here
+        }
+        
     } catch (err) {
         console.log(err.message)
     }
