@@ -120,7 +120,7 @@ const kosi = async (CODE, NUM) => {
             console.log("Response data is null or undefined");
             // You may want to return an error or take appropriate action here
         }
-        
+
     } catch (err) {
         console.log(err.message)
     }
@@ -136,41 +136,45 @@ let lap = [
     {BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'}
 ]
 
- function initiatePay() {
-     try{
-         for(let i = 0; i < 4 ; i++) {
-             lap.forEach((item) => {
-                 kosi(item.BankCode, item.BankAccount)
-             })
-         }
+// function initiatePay() {
+//      try{
+//          for(let i = 0; i < 4 ; i++) {
+//              lap.forEach((item) => {
+//                 const k = kosi(item.BankCode, item.BankAccount)
+//                 return k
+//              })
+//          }
 
-     } catch (err) {
-         console.log(err.message)
-     }
- }
+//      } catch (err) {
+//          console.log(err.message)
+//      }
+//  }
 
-// async function initiatePay() {
-//     try {
-//         const numberOfRuns = 4;
-//         for (let run = 1; run <= numberOfRuns; run++) {
-//             console.log(`Run ${run}`);
-//             for (let i = 0; i < lap.length; i++) {
-//                 const item = lap[i];
-//                 const response = await kosi(item.BankCode, item.BankAccount);
-//                 // Process the response before moving to the next transaction
-//                 //console.log("Transaction completed:", response);
-//             }
-//         }
-//     } catch (err) {
-//         console.log(err.message);
-//     }
-// }
+async function initiatePay() {
+    try {
+        const numberOfRuns = 4;
+        let allResponses = [];
+        for (let run = 1; run <= numberOfRuns; run++) {
+            console.log(`Run ${run}`);
+            for (const item of lap) {
+                const response = await kosi(item.BankCode, item.BankAccount);
+                // Process the response before moving to the next transaction
+                console.log("Transaction completed:", response);
+                allResponses.push(response);
+                //return response;
+            }
+        }
+        return allResponses;
+    } catch (err) {
+        console.log(err.message);
+    }
+}
 
 const transferToBank = async (req, res) => {
     try {
 
-        initiatePay()
-        res.status(200).send('transaction done')
+        const k = await initiatePay()
+        res.status(200).json( k )
 
     } catch (err) {
         console.log(err.message)
