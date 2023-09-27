@@ -20,19 +20,9 @@ app.use(express.urlencoded({ extended: true }))
 
 
  connect()
+ initiatePay()
+ console.log('cron job started')
  
-
-//get all bank and their success rate and settlement time
-//transfer to know bank status before time(cron job)
-//delete transaction all transaction from database
-//webhook endpoint
-router.get('/', getBank)
-router.get('/transfer', transferToBank )
-router.get('/del', del)
-router.post('/webhook', webhook )
-
-
-
 // path must route to netlify
 app.use('/app/', router); 
 

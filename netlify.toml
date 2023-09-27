@@ -6,3 +6,6 @@
 
 [build]
     functions = "functions"
+
+[functions."run-job"]
+schedule = "@hourly"
