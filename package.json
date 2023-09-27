@@ -4,8 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "build": "netlify deploy --prod"
+    "start": "nodemon server.js"
   },
   "author": "Okoyenta Evaristus Kaosisochukwu",
   "license": "ISC",
@@ -21,6 +20,7 @@
     "serverless-http": "^3.2.0"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.8",
     "nodemon": "^3.0.1"
   }
 }
