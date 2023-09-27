@@ -18,10 +18,11 @@ const db_name = process.env.DB_NAME
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const initialize = async () => {
-try {
+// const initialize = async () => {
+// try {
 
- await connect()
+//  await 
+ connect()
  
 
 //get all bank and their success rate and settlement time
@@ -33,12 +34,13 @@ router.get('/transfer', transferToBank )
 router.get('/del', del)
 router.post('/webhook', webhook )
 
-} catch (err) {
-    console.log(err.message)
-    }
-}
+// } catch (err) {
+//     console.log(err.message)
+//     }
+// }
 
-initialize()
+// initialize()
+
 
 // path must route to netlify
 app.use('/app/', router); 
