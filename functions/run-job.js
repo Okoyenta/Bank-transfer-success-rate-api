@@ -15,17 +15,17 @@ const user = process.env.DB_USER
 const password = process.env.DB_PASSWORD
 const db_name = process.env.DB_NAME
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
 
-
- connect()
- initiatePay()
- console.log('cron job started')
- 
-// path must route to netlify
-app.use('/app/', router); 
-
-
-module.exports = app
-module.exports.handler = serverless(app)
+exports.handler = async function (event, context) {
+    console.log("Running the scheduled job...");
+  
+    // Add your job logic here
+    // For example, if you want to execute the initiatePay() function:
+    connect()
+    initiatePay();
+  
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "Scheduled job completed" }),
+    };
+  };
