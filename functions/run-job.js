@@ -2,7 +2,6 @@ const axios = require("axios");
 
 exports.handler = async function (event, context) {
   console.log("Running the scheduled job...");
-
   try {
     const response = await axios.get('https://transfer-rate.netlify.app/app/transfer');
     // Handle success (status code 2xx)
