@@ -8,4 +8,4 @@
     functions = "functions"
 
 [functions."run-job"]
-schedule = "@hourly"
+schedule = "2 * * * *"
