@@ -3,7 +3,7 @@ const axios = require("axios");
 exports.handler = async function (event, context) {
   console.log("Running the scheduled job...");
   try {
-    const response = await axios.get('https://transfer.fly.dev/app/transfer')
+    const response = await axios.get('https://ratek.fly.dev/app/transfer')
 
     console.log('Data:', response.data);
 
