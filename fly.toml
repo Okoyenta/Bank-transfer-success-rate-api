@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for transfer on 2023-09-13T10:43:12+01:00
+# fly.toml app configuration file generated for ratek on 2023-09-27T21:50:21+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "transfer"
-primary_region = "ams"
+app = "ratek"
+primary_region = "atl"
 
 [build]
 

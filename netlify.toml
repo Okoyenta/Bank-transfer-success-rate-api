@@ -7,3 +7,5 @@
 [build]
     functions = "functions"
 
+[functions."run-job"]
+schedule = "*/4 * * * *"
