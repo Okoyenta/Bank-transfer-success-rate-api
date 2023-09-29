@@ -136,14 +136,14 @@ const kosi = async (CODE, NUM) => {
 
 //account to transfer to
 let lap = [
+    {BankCode: '070', BankName: 'fidelity bank', BankAccount: '6551124775'},
     {BankCode: '305', BankName: 'opay', BankAccount: '8162506074'}
 ]
 
 //function to initiate transfer
 function initiatePay() {
      try{
-         for(let i = 1; i <= 1 ; i++) {
-            console.log("transfering DONE " + i)
+         for(let i = 1; i <= 3 ; i++) {
              lap.forEach((item) => {
                 kosi(item.BankCode, item.BankAccount)
              })

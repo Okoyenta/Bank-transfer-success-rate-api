@@ -5,7 +5,7 @@ require('dotenv').config()
 
 //require with context
 const getBank = require('./controller/bankController')
-const { transferToBank, webhook, initiatePay, del } = require("./controller/transferController")
+const { transferToBank, webhook, del } = require("./controller/transferController")
 const connect = require('./controller/db')
 
 const app = express()
