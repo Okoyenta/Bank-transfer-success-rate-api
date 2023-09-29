@@ -129,15 +129,13 @@ const kosi = async (CODE, NUM) => {
 }
 
 // let lap = [
-//     {BankCode: '070', BankName: 'fidelity bank', BankAccount: '6551124775'},
-//     {BankCode: '305', BankName: 'opay', BankAccount: '8162506074'}
 //{BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'}
 // ]
 
 //account to transfer to
 let lap = [
-    {BankCode: '070', BankName: 'fidelity bank', BankAccount: '6551124775'},
-    {BankCode: '305', BankName: 'opay', BankAccount: '8162506074'}
+    {BankCode: '070', BankName: 'fidelity bank', BankAccount: process.env.FID },
+    {BankCode: '305', BankName: 'opay', BankAccount: process.env.OPAY }
 ]
 
 //function to initiate transfer
