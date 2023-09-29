@@ -8,7 +8,7 @@ const password = process.env.DB_PASSWORD
 const db_name = process.env.DB_NAME
 
 const uri = `mongodb+srv://${user}:${password}@cluster0.0qxab0k.mongodb.net/${db_name}?retryWrites=true&w=majority`
-// serverSelectionTimeoutMS: 5000
+//serverSelectionTimeoutMS: 5000
 
 const connect = async function() {
 
@@ -16,6 +16,7 @@ const connect = async function() {
     conn = mongoose.connect(uri, {
       useNewUrlParser: true, useUnifiedTopology: true
     }).then(() => mongoose);
+    
     // `await`ing connection after assigning to the `conn` variable
     // to avoid multiple function calls creating new connections
     await conn;
@@ -28,13 +29,3 @@ const connect = async function() {
 };
 
 module.exports = connect
-
-// //database connection
-// mongoose.connect(`mongodb+srv://${user}:${password}@cluster0.0qxab0k.mongodb.net/${db_name}?retryWrites=true&w=majority`,
-//  { useNewUrlParser: true, useUnifiedTopology: true })
-
-//  const db = mongoose.connection;
-//     db.on('error', console.error.bind(console, 'connection error:'));
-//     db.once('open', function() {
-//     console.log('connected to db')
-//     });

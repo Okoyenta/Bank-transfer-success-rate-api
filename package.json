@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "ks": "nodemon server.js"
   },
   "author": "Okoyenta Evaristus Kaosisochukwu",
   "license": "ISC",

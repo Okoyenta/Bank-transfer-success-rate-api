@@ -2,21 +2,24 @@ const flutterwave = require('flutterwave-node-v3')
 const transfer = require('../model/transfer')
 const bank = require('../model/bank')
 
-//function to calculate settlement time
+
+//function to calculate success rate and settlement time of a bank
+//store the success rate in the bank database
+//store the settlement time in the bank database
 async function run(bankCode, accountNumber, bankName ){
 
      // Fetch transactions for the recipient bank and sort them by timestamp in descending order
      // Sort in descending order based on timestamp to get the latest transactions first
      const l1 = await transfer.find({ "data.bank_code": bankCode }).sort({ "data.paymentConfirmationTime": -1 }).limit(4)
-     console.log(l1)
+     //console.log(l1)
 
      const payTime = l1[0].data.paymentConfirmationTime
     
      // Filter out transactions that are not successful
-     const l2 = l1.filter((item) => item.data.status === 'FAILED')
-     console.log("------------------------")
-     console.log(l2)
-     console.log("------------------------")
+     const l2 = l1.filter((item) => item.data.status === 'SUCCESSFUL')
+    //  console.log("------------------------")
+    //  console.log(l2)
+    //  console.log("------------------------")
 
      // Calculate the number of successful transactions
      const l3 = l2.length
@@ -25,33 +28,37 @@ async function run(bankCode, accountNumber, bankName ){
      // Calculate the success rate
      const l5 = (l3 / l4) * 100
      const l51 = l5.toFixed(2)
-     console.log(l5)
+     // console.log(l5)
 
      //calculate timestamp in hr 
      const hourAgo = new Date()
      hourAgo.setHours(hourAgo.getHours() - 1)
 
-    
-     const l6i = l2.reduce((acc, item) => acc + Number(item.data.settlementTime), 0)
+    //calculate the settlement time of bank
+    if (l2.length > 0) {
+     //const l6i = l2.reduce((acc, item) => acc + Number(item.data.settlementTime), 0)
+     const l6i = l2.reduce((acc, item) => acc + Number(item.data.settlementTime || 0), 0);
      const l7i = l6i / l3
      const l7 = l7i.toFixed(2)
-     console.log(l6i+ "min")
-     console.log(l7i)
+    } else {
+        // Handle the case where l2 is empty (no 'SUCCESSFUL' items)
+        const l7 = 0.00;
+      }
 
      //store the success rate in the bank database
      const l6 = await bank.findOneAndUpdate({ "timeOfCronJob": { $gte : hourAgo } , "bank_code": bankCode }, { "success_rate": l51 + "%", "bank_code": bankCode, "account_number": accountNumber, "timeOfCronJob" :  payTime, "settlement_time": l7, "bank_name" : bankName }, { upsert: true , new: true })
-     console.log(l6)
+     //console.log(l6)
  }
 
-
- //try update the webhook time
- // Our transaction webhook. filter filter by first 4 transaction
+ //endpoint to receive webhook from flutterwave
+ //update transaction status and calculate settlement time
+ //call run function to calculate success rate and settlement time of a bank
  const webhook = async (req, res) => {
      try {
 
          const k1 = req.body
          const payDate = new Date()
-         console.log(k1.data.id)
+         //console.log(k1.data.id)
 
          //error handling
          if ( !k1.data.id ) {
@@ -59,7 +66,7 @@ async function run(bankCode, accountNumber, bankName ){
          }
 
          const lip = await transfer.findOne({ "data.id" : k1.data.id })
-         console.log(lip.data.status)
+         //console.log(lip.data.status)
          if( lip.data.status == k1.data.status ) {
              return res.sendStatus(200)
          }
@@ -73,12 +80,13 @@ async function run(bankCode, accountNumber, bankName ){
          const settlementTimeMin = settlementTime / (1000 * 60 )
          k2.data.settlementTime = settlementTimeMin.toFixed(2)
          await k2.save()
-         console.log(k2)
-
+         //console.log(k2)
+         console.log("webhook called")
 
          const bankCode = k2.data.bank_code
          const accountNumber = k2.data.account_number
          const bankName = k2.data.bank_name
+
          run(bankCode, accountNumber, bankName)
 
          res.status(200).send(k2)
@@ -88,8 +96,7 @@ async function run(bankCode, accountNumber, bankName ){
      }
  }
 
-
-//perform transfer to banks
+//function to perform a single transfer to a bank
 const kosi = async (CODE, NUM) => {
     try {
         const flw = new flutterwave(process.env.FLUTTER_PUBLIC_KEY, process.env.FLUTTER_SECRET_KEY)
@@ -102,13 +109,9 @@ const kosi = async (CODE, NUM) => {
             callback_url: "https://ratek.fly.dev/app/webhook",
             debit_currency: "NGN"
         };
+
         const response = await flw.Transfer.initiate(details);
         const payDate = new Date()
-        // response.data.paymentInitiationTime = payDate
-        // const lo = await transfer.create(response)
-        // console.log(lo)
-        // return lo
-
          // Check if response.data is not null or undefined before setting properties
          if (response.data) {
             response.data.paymentInitiationTime = payDate;
@@ -116,9 +119,8 @@ const kosi = async (CODE, NUM) => {
             console.log(lo);
             return lo;
         } else {
-            // Handle the case where response.data is null or undefined
+            console.log(response)
             console.log("Response data is null or undefined");
-            // You may want to return an error or take appropriate action here
         }
 
     } catch (err) {
@@ -129,18 +131,21 @@ const kosi = async (CODE, NUM) => {
 // let lap = [
 //     {BankCode: '070', BankName: 'fidelity bank', BankAccount: '6551124775'},
 //     {BankCode: '305', BankName: 'opay', BankAccount: '8162506074'}
+//{BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'}
 // ]
 
-//
+//account to transfer to
 let lap = [
-    {BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'}
+    {BankCode: '305', BankName: 'opay', BankAccount: '8162506074'}
 ]
 
+//function to initiate transfer
 function initiatePay() {
      try{
-         for(let i = 0; i < 4 ; i++) {
+         for(let i = 1; i <= 1 ; i++) {
+            console.log("transfering DONE " + i)
              lap.forEach((item) => {
-                const k = kosi(item.BankCode, item.BankAccount)
+                kosi(item.BankCode, item.BankAccount)
              })
          }
 
@@ -149,26 +154,7 @@ function initiatePay() {
      }
  }
 
-// async function initiatePay() {
-//     try {
-//         const numberOfRuns = 4;
-//         let allResponses = [];
-//         for (let run = 1; run <= numberOfRuns; run++) {
-//             console.log(`Run ${run}`);
-//             for (const item of lap) {
-//                 const response = await kosi(item.BankCode, item.BankAccount);
-//                 // Process the response before moving to the next transaction
-//                 console.log("Transaction completed:", response);
-//                 allResponses.push(response);
-//                 //return response;
-//             }
-//         }
-//         return allResponses;
-//     } catch (err) {
-//         console.log(err.message);
-//     }
-// }
-
+//endpoint to initiate transfer to serveral banks
 const transferToBank = async (req, res) => {
     try {
 
@@ -182,8 +168,12 @@ const transferToBank = async (req, res) => {
 
 //delete all transaction on database
 const del = async (req, res ) => {
-    const fin = await transfer.deleteMany({})
-    res.send('done')
+    try {
+        const fin = await transfer.deleteMany({})
+        res.json({message: "done"})
+    } catch (err) {
+        console.log(err.message)
+    }
 }
 
-module.exports = { transferToBank, webhook, initiatePay, del }
+module.exports = { transferToBank, webhook, del }

@@ -1,11 +1,12 @@
-const serverless = require('serverless-http');
 const express = require('express')
-const cron = require('node-cron')
+const serverless = require('serverless-http');
+const mongoose = require('mongoose')
+require('dotenv').config()
+
+//require with context
 const getBank = require('./controller/bankController')
 const { transferToBank, webhook, initiatePay, del } = require("./controller/transferController")
 const connect = require('./controller/db')
-const mongoose = require('mongoose')
-require('dotenv').config()
 
 const app = express()
 const router = express.Router()
@@ -18,26 +19,39 @@ const db_name = process.env.DB_NAME
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+//connect to database
+// connect()
+// initiatePay()
 
- connect()
- 
+async function con() {
+    try {
+
+        await connect()
+        //await initiatePay()
+
+        router.get('/', getBank)
+        router.get('/transfer', transferToBank )
+        router.get('/del', del)
+        router.post('/webhook', webhook )
+
+    } catch (error) {
+        console.log(error);
+    }
+    }
+
+    con()
 
 //get all bank and their success rate and settlement time
 //transfer to know bank status before time(cron job)
 //delete transaction all transaction from database
 //webhook endpoint
-router.get('/', getBank)
-router.get('/transfer', transferToBank )
-router.get('/del', del)
-router.post('/webhook', webhook )
-
-
-
-
+// router.get('/', getBank)
+// router.get('/transfer', transferToBank )
+// router.get('/del', del)
+// router.post('/webhook', webhook )
 
 // path must route to netlify
 app.use('/app/', router); 
-
 
 module.exports = app
 module.exports.handler = serverless(app)
