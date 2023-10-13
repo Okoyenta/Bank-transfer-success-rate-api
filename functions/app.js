@@ -1,6 +1,7 @@
 const express = require('express')
 const serverless = require('serverless-http');
 const mongoose = require('mongoose')
+const cors = require('cors')
 require('dotenv').config()
 
 //require with context
@@ -16,6 +17,7 @@ const user = process.env.DB_USER
 const password = process.env.DB_PASSWORD
 const db_name = process.env.DB_NAME
 
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

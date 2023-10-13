@@ -34,15 +34,16 @@ async function run(bankCode, accountNumber, bankName ){
      const hourAgo = new Date()
      hourAgo.setHours(hourAgo.getHours() - 1)
 
+     let l7 = null;
     //calculate the settlement time of bank
     if (l2.length > 0) {
      //const l6i = l2.reduce((acc, item) => acc + Number(item.data.settlementTime), 0)
      const l6i = l2.reduce((acc, item) => acc + Number(item.data.settlementTime || 0), 0);
      const l7i = l6i / l3
-     const l7 = l7i.toFixed(2)
+           l7 = l7i.toFixed(2)
     } else {
         // Handle the case where l2 is empty (no 'SUCCESSFUL' items)
-        const l7 = 0.00;
+           l7 = 0.00;
       }
 
      //store the success rate in the bank database
@@ -130,11 +131,11 @@ const kosi = async (CODE, NUM) => {
 
 // let lap = [
 //{BankCode: '044', BankName: 'access bank', BankAccount: '0690000031'}
+//{BankCode: '070', BankName: 'fidelity bank', BankAccount: process.env.FID },
 // ]
 
 //account to transfer to
 let lap = [
-    {BankCode: '070', BankName: 'fidelity bank', BankAccount: process.env.FID },
     {BankCode: '305', BankName: 'opay', BankAccount: process.env.OPAY }
 ]
 
@@ -142,6 +143,7 @@ let lap = [
 function initiatePay() {
      try{
          for(let i = 1; i <= 3 ; i++) {
+            console.log("transfer to bank " + i)
              lap.forEach((item) => {
                 kosi(item.BankCode, item.BankAccount)
              })
